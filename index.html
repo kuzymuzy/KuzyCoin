@@ -4,9 +4,14 @@
     <meta charset="UTF-8">
     <title>Kuzy Coin</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1, minimum-scale=1, height=device-height">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://kuzymuzy.ru/assets/img/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Kuzy Coin">
     <script src="/assets/scripts/cookie.js"></script>
     <script src="/assets/scripts/testmode.js"></script>
-    <script>
+    <script type="module">
         const AuthToken = getCookie("authToken");
         const userid = getCookie("userid");
         if (AuthToken || userid){
@@ -1034,17 +1039,32 @@
             }
         }
 
-        function ifapplication(){
-            if (navigator.userAgent.includes("KuzyCoinApp")){
+        function ifapplication() {
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
+            const isIOS = /iPhone|iPad|iPod/i.test(ua);
+            const isKuzyCoinApp = ua.includes("KuzyCoinApp");
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const appver = urlParams.get("appver");
+            const buildver = urlParams.get("buildver");
+
+            if ((isIOS || isKuzyCoinApp) && (!appver || !buildver)) {
+                const targetUrl = new URL(window.location.origin + window.location.pathname);
+                targetUrl.searchParams.set("appver", "1.0.1");
+                targetUrl.searchParams.set("buildver", "101100");
+                window.location.replace(targetUrl.toString());
+                return;
+            }
+
+            if (isKuzyCoinApp || isIOS && appver && buildver) {
                 const appverdoc = document.getElementById("appver");
                 const buildverdoc = document.getElementById("buildver");
-                const urlParams = new URLSearchParams(window.location.search);
-                const appver = urlParams.get('appver');
-                const buildver = urlParams.get('buildver');
-                appverdoc.style.display = "block"
-                buildverdoc.style.display = "block"
-                appverdoc.textContent = `Version: ${appver}`;
-                buildverdoc.textContent = `Build Version: ${buildver}`;
+                if (appverdoc && buildverdoc) {
+                    appverdoc.style.display = "block";
+                    buildverdoc.style.display = "block";
+                    appverdoc.textContent = `Version: ${appver}`;
+                    buildverdoc.textContent = `Build Version: ${buildver}`;
+                }
             }
         }
 
