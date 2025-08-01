@@ -31,6 +31,10 @@
         }
     </script>
     <style>
+        html, body {
+            background-color: #1e1e2f;
+        }
+
         body {
             touch-action: none;
             font-family: Arial, sans-serif;
@@ -671,6 +675,16 @@
         </div>
     </div>
 
+    <div id="AddToHomeScreenModal" class="modal-overlay">
+        <div class="modal">
+            <h2 id="DownloadModalText">К сожалению мы не можем разработать приложение под ios, давай добавим сайт на твой рабочий стол, это будет удобнее и без багов)</h2>
+            <div class="modal-actions">
+                <button id="ok_davai" class="okbutton">Давай</button>
+                <button class="okbutton" onclick="closeModal('AddToHomeScreenModal')">Не сейчас</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         let user_id = getCookie("userid");
         let score = 0;
@@ -1025,7 +1039,8 @@
             const isWindows = /Windows NT/i.test(ua);
             const isIOS = /iPhone|iPad|iPod/i.test(ua);
             const isMac = /Macintosh|Mac OS X/i.test(ua) && !isIOS;
-            const showdownloadmodal = localStorage.getItem("showdownloadmodal")
+            const showdownloadmodal = localStorage.getItem("showdownloadmodal");
+            const showAddToHomeScreenModal = localStorage.getItem("showAddToHomeScreenModal");
 
             if (isWindows || isMac || isAndroid) {
                 if (!showdownloadmodal) {
@@ -1034,24 +1049,49 @@
                 } else {
                     console.log("i all ready show download modal")
                 }
+            } else if (isIOS){
+                if (!showAddToHomeScreenModal) {
+                    openModal('AddToHomeScreenModal')
+                    localStorage.setItem("showAddToHomeScreenModal", "true")
+                } else{
+                    console.log("i all ready show download modal")
+                }
             } else {
                 console.log("ios or it is an app")
             }
         }
 
+        const shareData = {
+            title: "Kuzy Coin",
+            text: "Добавим апликуху на рабочий стол",
+            url: "https://kuzycoin.kuzymuzy.ru/index.html",
+        };
+
+        const davai = document.getElementById("ok_davai");
+
+        davai.addEventListener("click", async () => {
+            try {
+                await navigator.share(shareData);
+                resultPara.textContent = "MDN shared successfully";
+            } catch (err) {
+                resultPara.textContent = `Error: ${err}`;
+            }
+        });
+
         function ifapplication() {
             const ua = navigator.userAgent || navigator.vendor || window.opera;
             const isIOS = /iPhone|iPad|iPod/i.test(ua);
             const isKuzyCoinApp = ua.includes("KuzyCoinApp");
+            const isInStandalone = window.navigator.standalone === true;
 
             const urlParams = new URLSearchParams(window.location.search);
             const appver = urlParams.get("appver");
             const buildver = urlParams.get("buildver");
 
-            if ((isIOS || isKuzyCoinApp) && (!appver || !buildver)) {
+            if ((isIOS && isInStandalone) && (!appver || !buildver)) {
                 const targetUrl = new URL(window.location.origin + window.location.pathname);
-                targetUrl.searchParams.set("appver", "1.0.1");
-                targetUrl.searchParams.set("buildver", "101100");
+                targetUrl.searchParams.set("appver", "1.0.0 (Beta)");
+                targetUrl.searchParams.set("buildver", "100100");
                 window.location.replace(targetUrl.toString());
                 return;
             }
