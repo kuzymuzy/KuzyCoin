@@ -1,0 +1,34 @@
+{
+    "icons": [
+        {
+            "name": "skin1",
+            "skinuri": "/assets/skins/icons/skin1" 
+        },
+        {
+            "name": "skin2",
+            "skinuri": "/assets/skins/icons/skin2" 
+        },
+        {
+            "name": "skin3",
+            "skinuri": "/assets/skins/icons/skin3" 
+        }
+    ],
+    "backgrouns": [
+        {
+            "name": "skin1",
+            "skincode": "linear-gradient(135deg, #1e1e2f, #3a3a5f)"
+        },
+        {
+            "name": "skin2",
+            "skincode": "linear-gradient(135deg, #4776e6, #8e54e9)" 
+        },
+        {
+            "name": "skin3",
+            "skincode": "linear-gradient(135deg, #1488cc, #2b32b2)" 
+        },
+        {
+            "name": "skin4",
+            "skincode": "linear-gradient(135deg, #aa076b, #61045f)"
+        }
+    ]
+}
