@@ -677,9 +677,10 @@
 
     <div id="AddToHomeScreenModal" class="modal-overlay">
         <div class="modal">
-            <h2 id="DownloadModalText">К сожалению мы не можем разработать приложение под ios, давай добавим сайт на твой рабочий стол, это будет удобнее и без багов)</h2>
+            <h2 id="AddToHomeScreenModalText">К сожалению мы не можем разработать приложение под ios, давай добавим сайт на твой рабочий стол, это будет удобнее и без багов)</h2>
             <div class="modal-actions">
                 <button id="ok_davai" class="okbutton">Давай</button>
+                <button style="display: none;" onclick="closeModal('AddToHomeScreenModal')" id="okbtn" class="okbutton">ok</button>
                 <button class="okbutton" onclick="closeModal('AddToHomeScreenModal')">Не сейчас</button>
             </div>
         </div>
@@ -1062,18 +1063,14 @@
             }
         }
 
-        const shareData = {
-            title: "Kuzy Coin",
-            text: "Добавим апликуху на рабочий стол",
-            url: "https://kuzycoin.kuzymuzy.ru/index.html",
-        };
-
         const davai = document.getElementById("ok_davai");
+        const okbtn = document.getElementById("okbtn");
 
         davai.addEventListener("click", async () => {
             try {
-                await navigator.share(shareData);
-                resultPara.textContent = "MDN shared successfully";
+                document.getElementById("AddToHomeScreenModalText").textContent = "Ниже у тебя есть кнопка поделиться, нажми на нее, пролистай вниз, а дальше нажми кнопку добавить на главный экран";
+                davai.style.display = "none";
+                okbtn.style.display = "block";
             } catch (err) {
                 resultPara.textContent = `Error: ${err}`;
             }
