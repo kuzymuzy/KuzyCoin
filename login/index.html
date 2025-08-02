@@ -91,7 +91,7 @@
                     <button type="submit" class="btn btn-primary w-100">Login</button>
                     <div id="login-message" class="mt-3 text-center"></div>
                 </form><br>
-                <center><a style="display: none;" id="forgotpassword"  href="/forgot-password/index.html">forgot your password?</a> </center>
+                <center><a style="display: none;" id="forgotpassword">forgot your password?</a> </center>
                 <center><a href="/signup/index.html">No account yet?</a></center><br>
                 <a href="/"><--- Back to kuzymuzy.ru</a>
             </div>
@@ -99,6 +99,9 @@
     </div>
 
     <script>
+        if (getCookie("email")){
+            document.getElementById("email").value = getCookie("email");
+        }
         document.getElementById('login-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const email = document.getElementById('email').value;
@@ -114,6 +117,7 @@
                     if (data.success) {
                         if (rememberMe) {
                             setCookie("remember", "1", 300);
+                            setCookie("email", email, 300);
                             setCookie("userid", data.user_id, 300);
                             setCookie("authToken", data.authToken, 300);
                         } else {
@@ -125,7 +129,13 @@
                     } if (data.message === "Invalid email or password!"){
                         loginMessage.textContent = data.message;
                         loginMessage.classList.add('text-danger');
-                        document.getElementById("forgotpassword").style.display="block"
+                        document.getElementById("forgotpassword").style.display="block";
+                        if (email){
+                            document.getElementById("forgotpassword").href = `/forgot-password/index.html?email=${encodeURIComponent(email)}`;
+                        } else {
+                            document.getElementById("forgotpassword").href = `/forgot-password/index.html`;
+                        }
+                        
                     } else {
                         loginMessage.textContent = data.message;
                         loginMessage.classList.add('text-danger');

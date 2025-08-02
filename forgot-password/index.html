@@ -90,6 +90,18 @@
     </div>
 
     <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const emailfu = urlParams.get("email");
+        const usernamefu = urlParams.get("username");
+        if (emailfu || usernamefu){
+            if (emailfu){
+                document.getElementById('email').value = emailfu;
+            }
+            if (usernamefu){
+                document.getElementById('username').value = usernamefu;
+            }
+        }
+
         document.getElementById('login-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const email = document.getElementById('email').value;
