@@ -745,7 +745,7 @@
                     if (data.ban === 1) {
                         window.location.replace("/ban.html")
                     } else if (data.error) {
-
+                        location.reload();
                     } else {
                         let username = data.username;
                         document.getElementById("name").textContent = `🌍 ${username}`;
