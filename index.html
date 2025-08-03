@@ -775,7 +775,6 @@
         function scheduleUpdate() {
             clearTimeout(updateTimeout);
             updateTimeout = setTimeout(updateData, 1000);
-            console.log("Data schedule Update")
         }
 
         function updateData() {
@@ -794,6 +793,20 @@
                 checkUpgrades();
                 updateUI();
                 scheduleUpdate();
+            }
+        });
+
+        window.addEventListener("beforeunload", function () {
+            if (updateTimeout !== null) {
+                clearTimeout(updateTimeout);
+                updateTimeout = null;
+
+                fetch(`${bacendserv}/update_user_data.php`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `user_id=${user_id}&score=${score}&energy=${energy}&click_power=${clickPower}&max_energy=${maxEnergy}&last_update_time=${lastUpdateTime}&upgraded_levels=${JSON.stringify(upgradedLevels)}&timestamp=${timestamp}&AuthToken=${AuthToken}`
+                }).then(response => response.json());
+                console.log("Data sent via sendBeacon before unload");
             }
         });
 
