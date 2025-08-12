@@ -745,7 +745,7 @@
                     if (data.ban === 1) {
                         window.location.replace("/ban.html")
                     } else if (data.error) {
-                        location.reload();
+                        window.location.href = "/login/index.html";
                     } else {
                         let username = data.username;
                         document.getElementById("name").textContent = `🌍 ${username}`;
@@ -778,6 +778,7 @@
         }
 
         function updateData() {
+            lastUpdateTime = Date.now();
             fetch(`${bacendserv}/update_user_data.php`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -796,19 +797,12 @@
             }
         });
 
-        window.addEventListener("beforeunload", function () {
-            if (updateTimeout !== null) {
-                clearTimeout(updateTimeout);
-                updateTimeout = null;
-
-                fetch(`${bacendserv}/update_user_data.php`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: `user_id=${user_id}&score=${score}&energy=${energy}&click_power=${clickPower}&max_energy=${maxEnergy}&last_update_time=${lastUpdateTime}&upgraded_levels=${JSON.stringify(upgradedLevels)}&timestamp=${timestamp}&AuthToken=${AuthToken}`
-                }).then(response => response.json());
-                console.log("Data sent via sendBeacon before unload");
-            }
+        window.addEventListener('beforeunload', (event) => {
+            updateData();
+            const start = Date.now();
+            while (Date.now() - start < 200) {}
         });
+
 
         const upgradeLevels = [2000, 5000, 10000, 20000, 50000];
 
