@@ -125,7 +125,13 @@
                             setCookie("userid", data.user_id);
                             setCookie("authToken", data.authToken);
                         }
-                        window.location.href = "/index.html";
+                        const isInStandalone = window.navigator.standalone === true;
+                        if (isInStandalone){
+                            window.location.href = "/index.html?appver=1.0.1&buildver=1.0.0 (Beta)";
+                        }
+                        else{
+                            window.location.href = "/index.html";
+                        }
                     } if (data.message === "Invalid email or password!"){
                         loginMessage.textContent = data.message;
                         loginMessage.classList.add('text-danger');
