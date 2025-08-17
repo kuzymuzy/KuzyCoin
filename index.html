@@ -1098,13 +1098,6 @@
             const appver = urlParams.get("appver");
             const buildver = urlParams.get("buildver");
 
-            if ((isIOS && isInStandalone) && (!appver || !buildver)) {
-                const targetUrl = new URL(window.location.origin + window.location.pathname);
-                targetUrl.searchParams.set("appver", "1.0.0 (Beta)");
-                targetUrl.searchParams.set("buildver", "100100");
-                return;
-            }
-
             if (isKuzyCoinApp || isIOS && appver && buildver) {
                 const appverdoc = document.getElementById("appver");
                 const buildverdoc = document.getElementById("buildver");
