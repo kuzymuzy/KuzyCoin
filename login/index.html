@@ -26,7 +26,7 @@
                     const isIOS = /iPhone|iPad|iPod/i.test(ua);
                     const isKuzyCoinApp = ua.includes("KuzyCoinApp");
                     if (isInStandalone && isIOS){
-                        window.location.href = "/index.html?appver=1.0.0 (Beta)&buildver=101100";
+                        window.location.href = "/index.html?appver=1.0.0 (Beta)&buildver=100100";
                     }
                     else if (isKuzyCoinApp){
                         const versionMatch = ua.match(/KuzyCoinApp\/([\d.]+)/);
@@ -141,10 +141,19 @@
                             setCookie("userid", data.user_id);
                             setCookie("authToken", data.authToken);
                         }
+                        const ua = navigator.userAgent || navigator.vendor || window.opera;
                         const isInStandalone = window.navigator.standalone === true;
                         const isIOS = /iPhone|iPad|iPod/i.test(ua);
+                        const isKuzyCoinApp = ua.includes("KuzyCoinApp");
                         if (isInStandalone && isIOS){
-                            window.location.href = "/index.html?appver=1.0.1&buildver=1.0.0 (Beta)";
+                            window.location.href = "/index.html?appver=1.0.0 (Beta)&buildver=100100";
+                        }
+                        else if (isKuzyCoinApp){
+                            const versionMatch = ua.match(/KuzyCoinApp\/([\d.]+)/);
+                            const version = versionMatch ? versionMatch[1] : null;
+                            const buildMatch = ua.match(/KuzyCoin\/(\d+)/);
+                            const build = buildMatch ? buildMatch[1] : null;
+                            window.location.href = `/index.html?appver=version&buildver=build`;
                         }
                         else {
                             window.location.href = "/index.html";
